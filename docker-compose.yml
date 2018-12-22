@@ -1,0 +1,41 @@
+version: '3'
+services:
+  php:
+    image: oliverlundquist/php7-wordpress:latest
+    ports:
+      - "80:80"
+    environment:
+      VALIDATE_TIMESTAMPS: 1
+      REVALIDATE_FREQ: 0
+    volumes:
+      - .:/var/www/html:cached
+    networks:
+      - php-app
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: legacy-app
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../storage/mysql:/var/lib/mysql:cached
+    networks:
+      - php-app
+  # php-queue-worker:
+  #   image: oliverlundquist/php7-queue-worker:latest
+  #   command: ["php", "artisan", "queue:work", "--once", "--queue=default", "--delay=1", "--memory=768", "--sleep=3", "--tries=3"]
+  #   volumes:
+  #     - .:/var/www/html:cached
+  #   networks:
+  #     - php-app
+  # pusher:
+  #   image: oliverlundquist/pusher-local-dev-server:latest
+  #   ports:
+  #     - "57003:57003"
+  #     - "57004:57004"
+  #   networks:
+  #     - php-app
+networks:
+  php-app:
+    driver: bridge

@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('products_list.php', 'ProductsListController@index');
+Route::put('products_list.php', 'ProductsListController@update');
